@@ -1,27 +1,18 @@
-import { CalenderInput } from "@/components/calender";
+import { CalenderInput } from "@/components/dateInput";
+import { IPodProps } from "@/config/types";
 import { unstable_cache as nextCache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-
-export interface IPodProps {
-  copyright: string | undefined;
-  date: string;
-  explanation: string;
-  hdurl: string;
-  media_type: string;
-  service_version: string;
-  title: string;
-  url: string;
-}
-
-async function getPodData() {
-  const data: IPodProps = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}&date=2024-01-01`).then(res => res.json());
-  return data;
-}
 
 async function getPodList() {
-  const data: IPodProps[] = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}&start_date=2024-12-01&end_date=2025-01-01`).then(res => res.json());
+  const today = new Date().toLocaleDateString("ko-kr", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  })
+    .replace(/\./g, '')
+    .replace(/\s/g, '-');
+  const data: IPodProps[] = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}&start_date=2024-12-01&end_date=${today}`).then(res => res.json());
   return data;
 }
 
@@ -29,10 +20,8 @@ const getCachedPodList = nextCache(getPodList, ["pod-list"], {
   tags: ["pod-list"]
 });
 
-export const Home = async () => {
-  // const data = await getPodData();
+const Home = async () => {
   const data = await getCachedPodList();
-  // console.log(data);
   return (
     <div className="w-screen h-screen">
       <CalenderInput />
@@ -41,7 +30,7 @@ export const Home = async () => {
           {data.map((pod, index) => (
             <div key={index} className="w-[200px]">
               <div className="relative w-[200px] h-[200px]">
-                <Link href={typeof pod.hdurl === "string" ? pod.hdurl : ""}>
+                <Link href={`/detail/${pod.date}`}>
                   {!pod.url.includes("youtube") && (
                     <Image
                       fill
@@ -51,7 +40,6 @@ export const Home = async () => {
                       }}
                       src={pod.url}
                       alt={pod.title}
-                      priority
                     />
                   )}
                 </Link>
@@ -64,28 +52,6 @@ export const Home = async () => {
           ))}
         </div>
       )}
-      {/* {data && (
-        <div>
-          <Link href={data.hdurl}>
-            <div className="relative w-[200px] h-[200px]">
-              <Image
-                fill
-                sizes="(max-width: 500px),(max-height: 500px)"
-                style={{
-                  objectFit: "contain"
-                }}
-                src={data.url}
-                alt={data.title}
-                priority
-              />
-            </div>
-          </Link>
-          <div>
-            <h1>{data.title}</h1>
-            <p>{data.explanation}</p>
-          </div>
-        </div>
-      )} */}
     </div>
   )
 }
