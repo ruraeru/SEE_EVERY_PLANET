@@ -12,12 +12,12 @@ async function getPodList() {
   })
     .replace(/\./g, '')
     .replace(/\s/g, '-');
-  const data: IPodProps[] = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}&start_date=2024-12-01&end_date=${today}`).then(res => res.json());
+  const data: IPodProps[] = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}&start_date=2024-11-01&end_date=${today}`).then(res => res.json());
   return data;
 }
 
 const getCachedPodList = nextCache(getPodList, ["pod-list"], {
-  tags: ["pod-list"]
+  tags: ["pod-list"],
 });
 
 const Home = async () => {
