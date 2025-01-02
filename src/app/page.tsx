@@ -28,8 +28,8 @@ const Home = async () => {
       {data && (
         <div className="flex flex-wrap gap-2 justify-center">
           {data.map((pod, index) => (
-            <div key={index} className="w-[200px]">
-              <div className="relative w-[200px] h-[200px]">
+            <div key={index} className="w-[200px] h-[200px]">
+              <div className="relative w-full h-3/4 ">
                 <Link href={`/detail/${pod.date}`}>
                   {!pod.url.includes("youtube") && (
                     <Image
@@ -46,7 +46,7 @@ const Home = async () => {
               </div>
               <div>
                 <h1>{pod.date}</h1>
-                <p className="break-all">{pod.title}</p>
+                <p className="truncate">{pod.title}</p>
               </div>
             </div>
           ))}
