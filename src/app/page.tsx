@@ -26,12 +26,13 @@ const Home = async () => {
     <div className="w-screen h-screen">
       <CalenderInput />
       {data && (
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="grid place-items-center grid-cols-2  
+        sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {data.map((pod, index) => (
             <div key={index} className="w-[200px] h-[200px]">
-              <div className="relative w-full h-3/4 ">
-                <Link href={`/detail/${pod.date}`}>
-                  {!pod.url.includes("youtube") && (
+              {!pod.url.includes("youtube") && (
+                <div className="relative w-full h-3/4 ">
+                  <Link href={`/detail/${pod.date}`}>
                     <Image
                       fill
                       sizes="(max-width: 500px),(max-height: 500px)"
@@ -41,9 +42,9 @@ const Home = async () => {
                       src={pod.url}
                       alt={pod.title}
                     />
-                  )}
-                </Link>
-              </div>
+                  </Link>
+                </div>
+              )}
               <div>
                 <h1>{pod.date}</h1>
                 <p className="truncate">{pod.title}</p>
