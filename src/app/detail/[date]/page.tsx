@@ -20,6 +20,7 @@ const DetailPage = async ({ params }: { params: Promise<{ date: string }> }) => 
         "use server"
         redirect("/");
     }
+    const isImage = !data.url.includes("youtube");
     return (
         <div className="relative">
             <form action={onClick}>
@@ -27,17 +28,25 @@ const DetailPage = async ({ params }: { params: Promise<{ date: string }> }) => 
             </form>
             <div className="h-screen w-screen flex flex-col items-center justify-center p-24">
                 <div className="flex justify-center items-center h-full">
-                    <Link href={data.hdurl} className="relative w-full h-full aspect-square">
-                        <Image
-                            style={{
-                                objectFit: "contain"
-                            }}
-                            fill
-                            sizes='(max-width: 1000px) 50vw, 450px'
-                            src={data.url}
-                            alt="12"
-                            priority
-                        />
+                    <Link href={isImage ? data.hdurl : data.url} className="relative w-full h-full aspect-square">
+                        {isImage ? (
+                            <div>
+                                <Image
+                                    style={{
+                                        objectFit: "contain"
+                                    }}
+                                    fill
+                                    sizes='(max-width: 1000px) 50vw, 450px'
+                                    src={data.url}
+                                    alt="12"
+                                    priority
+                                />
+                            </div>
+                        ) : (
+                            <div className="aspect-video">
+                                <iframe width="100%" height="100%" src={data.url} />
+                            </div>
+                        )}
                     </Link>
                 </div>
                 <div className="w-full">
