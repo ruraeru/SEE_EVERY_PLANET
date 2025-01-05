@@ -1,11 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { validateUser } from "./actions";
 import Input from "@/components/intro/input";
 
 const NamePage = () => {
     const [state, dispatch] = useActionState(validateUser, null);
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
     return (
         <div>
             <form action={dispatch} className="flex flex-col items-center">

@@ -1,4 +1,5 @@
 import { IPodProps } from "@/config/types";
+import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,12 +14,20 @@ const getCachedPodData = nextCache(getPodData, ["pod-data"], {
     tags: ["pod-data"]
 })
 
+export async function generateMetadata({ params }: { params: Promise<{ date: string }> }): Promise<Metadata> {
+    const { date } = await params;
+    const pod = await getCachedPodData(date);
+    return {
+        title: pod.title
+    }
+}
+
 const DetailPage = async ({ params }: { params: Promise<{ date: string }> }) => {
     const { date } = await params;
     const data = await getCachedPodData(date);
     const onClick = async () => {
         "use server"
-        redirect("/");
+        redirect("/main");
     }
     const isImage = !data.url.includes("youtube");
     return (

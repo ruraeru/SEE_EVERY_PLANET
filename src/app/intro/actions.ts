@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import test from "node:test";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -23,7 +24,7 @@ const formSchema = z.object({
     .max(31),
 });
 
-export async function validateUser(_: any, formData: FormData) {
+export async function validateUser(_: unknown, formData: FormData) {
   const data = {
     username: formData.get("username"),
     year: formData.get("year"),
@@ -39,10 +40,11 @@ export async function validateUser(_: any, formData: FormData) {
       isSuccess: false,
     };
   } else {
+    const birthDay = `${result.data.year}-${result.data.month
+      .toString()
+      .padStart(2, "0")}-${result.data.day.toString().padStart(2, "0")}`;
     localStorage.setItem("username", result.data.username);
-    localStorage.setItem("year", result.data.year.toString());
-    localStorage.setItem("month", result.data.month.toString());
-    localStorage.setItem("day", result.data.day.toString());
-    redirect("/main");
+    localStorage.setItem("birthDay", birthDay);
+    redirect(`/detail/${birthDay}`);
   }
 }
