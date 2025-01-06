@@ -9,8 +9,14 @@ const yeonSung = Yeon_Sung({
 })
 
 export const metadata: Metadata = {
-  title: "See My Planet",
+  title: {
+    template: "See My Planet | %s",
+    default: "See My Planet"
+  },
   description: "Developed by taewoo",
+  icons: {
+    icon: "/openGraph_image.jpg"
+  }
 };
 
 export default function RootLayout({
