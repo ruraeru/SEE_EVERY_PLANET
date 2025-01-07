@@ -9,41 +9,33 @@ const formSchema = z.object({
     })
     .toLowerCase()
     .trim(),
-  year: z.coerce
-    .number({ invalid_type_error: "숫자로 입력해주세요" })
-    .min(1900)
-    .max(2025),
-  month: z.coerce
-    .number({ invalid_type_error: "숫자로 입력해주세요" })
-    .min(1)
-    .max(12),
-  day: z.coerce
-    .number({ invalid_type_error: "숫자로 입력해주세요" })
-    .min(1)
-    .max(31),
+  birthDay: z.string(),
 });
 
 export async function validateUser(_: unknown, formData: FormData) {
   const data = {
     username: formData.get("username"),
-    year: formData.get("year"),
-    month: formData.get("month"),
-    day: formData.get("day"),
+    birthDay: formData.get("birth_day"),
   };
-  console.log(data);
   const result = formSchema.safeParse(data);
-  console.log(result);
   if (!result.success) {
     return {
       error: result.error.flatten(),
       isSuccess: false,
     };
   } else {
-    const birthDay = `${result.data.year}-${result.data.month
-      .toString()
-      .padStart(2, "0")}-${result.data.day.toString().padStart(2, "0")}`;
+    if (result.data.username.length < 1) {
+      return {
+        error: {
+          fieldErrors: {
+            username: ["이름을 입력해주세요!!!"],
+            birthDay: [],
+          },
+        },
+      };
+    }
     localStorage.setItem("username", result.data.username);
-    localStorage.setItem("birthDay", birthDay);
-    redirect(`/detail/${birthDay}`);
+    localStorage.setItem("birthDay", result.data.birthDay);
+    redirect(`/detail/${result.data.birthDay}`);
   }
 }
