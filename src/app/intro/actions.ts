@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+const checkUsername = (username: string) => username.length > 1;
+const checkBirthday = (birthDay: string) => birthDay.length > 1;
+
 const formSchema = z.object({
   username: z
     .string({
@@ -8,8 +11,9 @@ const formSchema = z.object({
       invalid_type_error: "문자열로 입력해주세요.",
     })
     .toLowerCase()
-    .trim(),
-  birthDay: z.string(),
+    .trim()
+    .refine(checkUsername, "이름을 입력해주세요!!"),
+  birthDay: z.string().refine(checkBirthday, "생년월일을 입력해주세요!!!"),
 });
 
 export async function validateUser(_: unknown, formData: FormData) {
@@ -18,22 +22,13 @@ export async function validateUser(_: unknown, formData: FormData) {
     birthDay: formData.get("birth_day"),
   };
   const result = formSchema.safeParse(data);
+  console.log(result.data?.birthDay);
   if (!result.success) {
     return {
       error: result.error.flatten(),
       isSuccess: false,
     };
   } else {
-    if (result.data.username.length < 1) {
-      return {
-        error: {
-          fieldErrors: {
-            username: ["이름을 입력해주세요!!!"],
-            birthDay: [],
-          },
-        },
-      };
-    }
     localStorage.setItem("username", result.data.username);
     localStorage.setItem("birthDay", result.data.birthDay);
     redirect(`/detail/${result.data.birthDay}`);
