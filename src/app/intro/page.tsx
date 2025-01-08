@@ -21,25 +21,36 @@ const NamePage = () => {
     }, []);
     return (
         <div>
-            <form action={dispatch} className="flex flex-col items-center">
-                <div>
+            <div>
+                <h1 className="text-5xl font-extrabold text-center p-5 bg-neutral-500">🌍 SEE MY PLANET</h1>
+            </div>
+            <form action={dispatch} className="flex flex-col items-center p-5">
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="username">
+                        이름
+                    </label>
                     <Input
                         name="username"
                         placeholder="이름을 입력해주세요"
                         errors={state?.error?.fieldErrors.username}
                     />
                 </div>
-                <div className="flex gap-5 mt-10">
-                    <Input
-                        name="birth_day"
-                        placeholder="YYYY-MM-DD"
-                        errors={state?.error?.fieldErrors.birthDay}
-                        onChange={onChange}
-                        value={birthday}
-                        minLength={8}
-                        maxLength={10}
-                    />
-                    <button>submit</button>
+                <div className="flex gap-5 mt-10 flex-col">
+                    <div className="flex flex-col gap-2">
+                        <label htmlFor="birth_day">
+                            생일
+                        </label>
+                        <Input
+                            name="birth_day"
+                            placeholder="YYYY-MM-DD"
+                            errors={state?.error?.fieldErrors.birthDay}
+                            onChange={onChange}
+                            value={birthday}
+                            minLength={8}
+                            maxLength={10}
+                        />
+                    </div>
+                    <button className="bg-cyan-800 p-5 text-xl rounded-full">완료</button>
                 </div>
             </form>
         </div>

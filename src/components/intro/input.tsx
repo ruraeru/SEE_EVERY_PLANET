@@ -18,7 +18,7 @@ export default function Input({ name, errors = [], labelIcon, placeholder, ...re
                 </label>
                 <input
                     id={name}
-                    className={`bg-transparent rounded-3xl px-10 py-6 w-full h-12 focus:outline-none ring-2 focus:ring-4 transition bg-none
+                    className={`bg-transparent rounded-md px-10 py-6 w-full h-12 focus:outline-none ring-2 focus:ring-4 transition bg-none
                     ring-gray-500 focus:ring-neutral-200 
                     border-none placeholder:text-neutral-400
                     ${errors ? "border-red-500 focus:ring-cyan-400" : "border-stone-400 focus:ring-stone-300"}`}
